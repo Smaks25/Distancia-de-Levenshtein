@@ -1,0 +1,42 @@
+Algoritmo DistanciaLevenshtein
+  Entrada: cadena_origen: cadena, cadena_destino: cadena
+  Salida:  distancia: entero   // distancia de edición entre ambas cadenas
+
+  longitud_origen  ← Longitud(cadena_origen)
+  longitud_destino ← Longitud(cadena_destino)
+  Definir matriz como matriz de enteros de (longitud_origen + 1) × (longitud_destino + 1)
+
+  // Primera columna: borrar todos los caracteres del origen
+  fila ← 0
+  Mientras fila ≤ longitud_origen Hacer
+      matriz[fila][0] ← fila
+      fila ← fila + 1
+  Fin Mientras
+
+  // Primera fila: insertar todos los caracteres del destino
+  columna ← 0
+  Mientras columna ≤ longitud_destino Hacer
+      matriz[0][columna] ← columna
+      columna ← columna + 1
+  Fin Mientras
+
+  // Llenado de la matriz
+  Para fila ← 1 Hasta longitud_origen Hacer
+      Para columna ← 1 Hasta longitud_destino Hacer
+          Si cadena_origen[fila] = cadena_destino[columna] Entonces
+              costo_sustitucion ← 0
+          Sino
+              costo_sustitucion ← 1
+          Fin Si
+
+          costo_eliminacion ← matriz[fila-1][columna] + 1
+          costo_insercion   ← matriz[fila][columna-1] + 1
+          costo_cambio      ← matriz[fila-1][columna-1] + costo_sustitucion
+
+          matriz[fila][columna] ← Mín(costo_eliminacion, costo_insercion, costo_cambio)
+      Fin Para
+  Fin Para
+
+  distancia ← matriz[longitud_origen][longitud_destino]
+  Retornar distancia
+Fin Algoritmo
